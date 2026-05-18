@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">WameUp mark</title>
+  <desc id="desc">WameUp vector mark — chat shape with W monogram.</desc>
+  <rect width="512" height="512" rx="112" fill="#101010"/>
+  <!-- Outer chat bubble — electric green -->
+  <path d="M94 166c0-50 40-90 90-90h144c50 0 90 40 90 90v95c0 50-40 90-90 90h-68l-82 75c-19 17-49 4-49-22v-68c-22-16-35-42-35-75v-95Z" fill="#00d992"/>
+  <!-- Inner dark area — creates green border illusion -->
+  <path d="M128 170c0-34 27-61 61-61h134c34 0 61 27 61 61v86c0 34-27 61-61 61h-82l-72 66v-83h-5c-22 0-36-18-36-44v-86Z" fill="#101010"/>
+  <!-- W monogram — electric green on dark inner -->
+  <path d="M156 225l31-82 47 141 43-112 31 78 47-119" fill="none" stroke="#00d992" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Upward arrow — electric green -->
+  <path d="M316 131h39v39" fill="none" stroke="#00d992" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
