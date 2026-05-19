@@ -1,119 +1,71 @@
-# Next.js SaaS Starter
+# Wameup
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
-
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+**WhatsApp business automation platform.** Automate conversations, manage your team inbox, run broadcast campaigns, and scale customer communication without adding headcount.
 
 ## Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Pricing page (`/pricing`) which connects to Stripe Checkout
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
-- Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+- **Smart Automation** — build chatbot flows that handle enquiries 24/7
+- **Team Inbox** — shared inbox with agent handoff and conversation routing
+- **Broadcast Campaigns** — bulk messaging with audience segmentation
+- **Analytics & Reports** — delivery rates, read rates, automation performance
+- **Multi-tenant** — every workspace is fully isolated
 
 ## Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
-- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) |
+| Database | [PostgreSQL](https://www.postgresql.org/) + [Drizzle ORM](https://orm.drizzle.team/) |
+| Auth | [Supabase](https://supabase.com/) (email + Google OAuth) |
+| Payments | [Stripe](https://stripe.com/) (subscriptions + customer portal) |
+| UI | [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS 4](https://tailwindcss.com/) |
 
 ## Getting Started
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
+git clone https://github.com/wameup-com/wameup-saas
+cd wameup-saas
 pnpm install
 ```
 
-## Running Locally
-
-[Install](https://docs.stripe.com/stripe-cli) and log in to your Stripe account:
+### Environment Setup
 
 ```bash
-stripe login
+pnpm db:setup        # interactive .env wizard
+pnpm db:migrate      # run pending migrations
+pnpm db:seed         # seed initial data
+pnpm dev             # start dev server → http://localhost:3000
 ```
 
-Use the included setup script to create your `.env` file:
+### Environment Variables
 
-```bash
-pnpm db:setup
-```
+| Variable | Description |
+|---|---|
+| `BASE_URL` | Your domain (e.g. `http://localhost:3000`) |
+| `POSTGRES_URL` | PostgreSQL connection string |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `STRIPE_SECRET_KEY` | Stripe secret key |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook secret |
+| `AUTH_SECRET` | Random secret — `openssl rand -base64 32` |
 
-Run the database migrations and seed the database with a default user and team:
-
-```bash
-pnpm db:migrate
-pnpm db:seed
-```
-
-This will create the following user and team:
-
-- User: `test@test.com`
-- Password: `admin123`
-
-You can also create new users through the `/sign-up` route.
-
-Finally, run the Next.js development server:
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
-
-You can listen for Stripe webhooks locally through their CLI to handle subscription change events:
+### Stripe Webhooks (local)
 
 ```bash
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
-## Testing Payments
+Test card: `4242 4242 4242 4242` · any future expiry · any CVC
 
-To test Stripe payments, use the following test card details:
+## Scripts
 
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
+```bash
+pnpm dev             # dev server with Turbopack
+pnpm build           # production build
+pnpm db:generate     # generate Drizzle migration files after schema changes
+pnpm db:studio       # open Drizzle Studio (DB GUI)
+```
 
-## Going to Production
+## License
 
-When you're ready to deploy your SaaS application to production, follow these steps:
-
-### Set up a production Stripe webhook
-
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
-
-### Deploy to Vercel
-
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
-
-### Add environment variables
-
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
-
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
-- https://zerotoshipped.com
-- https://turbostarter.dev
+MIT © 2026 Wameup

@@ -1,287 +1,229 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { customerPortalAction } from '@/lib/payments/actions';
-import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
-import { removeTeamMember, inviteTeamMember } from '@/app/(login)/actions';
+import Link from 'next/link';
 import useSWR from 'swr';
-import { Suspense } from 'react';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Loader2, PlusCircle } from 'lucide-react';
-
-type ActionState = {
-  error?: string;
-  success?: string;
-};
+import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import {
+  MessageSquare,
+  Users,
+  Zap,
+  Clock,
+  TrendingUp,
+  ArrowUpRight,
+  CheckCircle2,
+  Circle,
+} from 'lucide-react';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function SubscriptionSkeleton() {
-  return (
-    <Card className="mb-8 h-[140px]">
-      <CardHeader>
-        <CardTitle>Team Subscription</CardTitle>
-      </CardHeader>
-    </Card>
-  );
-}
+const weeklyData = [
+  { day: 'Mon', sent: 3200, received: 2100 },
+  { day: 'Tue', sent: 4100, received: 2800 },
+  { day: 'Wed', sent: 3800, received: 2500 },
+  { day: 'Thu', sent: 5200, received: 3400 },
+  { day: 'Fri', sent: 4700, received: 3100 },
+  { day: 'Sat', sent: 2100, received: 1400 },
+  { day: 'Sun', sent: 1400, received: 900 },
+];
 
-function ManageSubscription() {
+const maxVal = Math.max(...weeklyData.map((d) => d.sent));
+
+const recentConversations = [
+  { name: 'Sophie Müller', preview: 'Hi, I want to know more about your pricing...', time: '2m ago', status: 'bot', unread: 2 },
+  { name: 'Lucas Bernard', preview: 'My order #4521 hasn\'t arrived yet', time: '8m ago', status: 'agent', unread: 0 },
+  { name: 'Emma Johansson', preview: 'The automation flow is working perfectly!', time: '15m ago', status: 'resolved', unread: 0 },
+  { name: 'Matteo Ricci', preview: 'Can I get a demo of the broadcast feature?', time: '34m ago', status: 'bot', unread: 1 },
+  { name: 'Clara Dubois', preview: 'Thank you, issue resolved 🙏', time: '1h ago', status: 'resolved', unread: 0 },
+];
+
+const statusConfig = {
+  bot: { label: 'Bot', color: 'bg-blue-100 text-blue-700' },
+  agent: { label: 'Agent', color: 'bg-[#3758F9]/10 text-[#3758F9]' },
+  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700' },
+};
+
+export default function OverviewPage() {
   const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
+  const { data: user } = useSWR<User>('/api/user', fetcher);
+
+  const stats = [
+    {
+      label: 'Messages Sent',
+      value: '24,521',
+      delta: '+12% this week',
+      up: true,
+      icon: MessageSquare,
+      color: 'bg-[#3758F9]/10 text-[#3758F9]',
+    },
+    {
+      label: 'Conversations',
+      value: '1,847',
+      delta: '+8% this week',
+      up: true,
+      icon: Users,
+      color: 'bg-[#13C296]/10 text-[#13C296]',
+    },
+    {
+      label: 'Automation Rate',
+      value: '73%',
+      delta: '+4% vs last week',
+      up: true,
+      icon: Zap,
+      color: 'bg-[#13C296]/10 text-[#13C296]',
+    },
+    {
+      label: 'Avg Response Time',
+      value: '1.2 min',
+      delta: '-18% faster',
+      up: true,
+      icon: Clock,
+      color: 'bg-purple-100 text-purple-600',
+    },
+  ];
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle>Team Subscription</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <div className="mb-4 sm:mb-0">
-              <p className="font-medium">
-                Current Plan: {teamData?.planName || 'Free'}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {teamData?.subscriptionStatus === 'active'
-                  ? 'Billed monthly'
-                  : teamData?.subscriptionStatus === 'trialing'
-                  ? 'Trial period'
-                  : 'No active subscription'}
-              </p>
-            </div>
-            <form action={customerPortalAction}>
-              <Button type="submit" variant="outline">
-                Manage Subscription
-              </Button>
-            </form>
-          </div>
+    <section className="p-4 lg:p-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-[#111928]">Overview</h1>
+          <p className="text-sm text-[#637381] mt-1">
+            Welcome back{user?.name ? `, ${user.name}` : ''}. Here's what's happening.
+          </p>
         </div>
-      </CardContent>
-    </Card>
-  );
-}
+        <div className="flex items-center gap-2 text-sm text-[#637381] bg-white border border-[#DFE4EA] rounded-lg px-3 py-2">
+          <TrendingUp className="h-4 w-4 text-[#3758F9]" />
+          Last 7 days
+        </div>
+      </div>
 
-function TeamMembersSkeleton() {
-  return (
-    <Card className="mb-8 h-[140px]">
-      <CardHeader>
-        <CardTitle>Team Members</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="animate-pulse space-y-4 mt-1">
-          <div className="flex items-center space-x-4">
-            <div className="size-8 rounded-full bg-gray-200"></div>
-            <div className="space-y-2">
-              <div className="h-4 w-32 bg-gray-200 rounded"></div>
-              <div className="h-3 w-14 bg-gray-200 rounded"></div>
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        {stats.map((stat) => (
+          <div key={stat.label} className="bg-white rounded-xl border border-[#DFE4EA] p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.color}`}>
+                <stat.icon className="h-5 w-5" />
+              </div>
+              <span className="flex items-center gap-1 text-xs font-medium text-green-600">
+                <ArrowUpRight className="h-3 w-3" />
+                {stat.delta}
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-[#111928]">{stat.value}</p>
+            <p className="text-sm text-[#637381] mt-1">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        {/* Weekly chart */}
+        <div className="xl:col-span-2 bg-white rounded-xl border border-[#DFE4EA] p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-semibold text-[#111928]">Weekly Message Volume</h2>
+            <div className="flex items-center gap-4 text-xs text-[#637381]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#3758F9] inline-block" />
+                Sent
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#3758F9]/20 inline-block" />
+                Received
+              </span>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function TeamMembers() {
-  const { data: teamData } = useSWR<TeamDataWithMembers>('/api/team', fetcher);
-  const [removeState, removeAction, isRemovePending] = useActionState<
-    ActionState,
-    FormData
-  >(removeTeamMember, {});
-
-  const getUserDisplayName = (user: Pick<User, 'id' | 'name' | 'email'>) => {
-    return user.name || user.email || 'Unknown User';
-  };
-
-  if (!teamData?.teamMembers?.length) {
-    return (
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Team Members</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">No team members yet.</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle>Team Members</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-4">
-          {teamData.teamMembers.map((member, index) => (
-            <li key={member.id} className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  {/* 
-                    This app doesn't save profile images, but here
-                    is how you'd show them:
-
-                    <AvatarImage
-                      src={member.user.image || ''}
-                      alt={getUserDisplayName(member.user)}
+          <div className="flex items-end gap-3 h-40">
+            {weeklyData.map((d) => (
+              <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
+                <div className="w-full flex flex-col items-center gap-0.5" style={{ height: '128px' }}>
+                  <div className="w-full flex items-end gap-0.5 h-full">
+                    <div
+                      className="flex-1 bg-[#3758F9] rounded-t-sm transition-all"
+                      style={{ height: `${(d.sent / maxVal) * 100}%` }}
                     />
-                  */}
-                  <AvatarFallback>
-                    {getUserDisplayName(member.user)
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">
-                    {getUserDisplayName(member.user)}
-                  </p>
-                  <p className="text-sm text-muted-foreground capitalize">
-                    {member.role}
-                  </p>
+                    <div
+                      className="flex-1 bg-[#3758F9]/20 rounded-t-sm transition-all"
+                      style={{ height: `${(d.received / maxVal) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <span className="text-xs text-[#637381]">{d.day}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Plan & quick actions */}
+        <div className="bg-white rounded-xl border border-[#DFE4EA] p-6">
+          <h2 className="font-semibold text-[#111928] mb-4">Current Plan</h2>
+          <div className="rounded-lg bg-[#3758F9]/5 border border-[#3758F9]/20 p-4 mb-4">
+            <p className="font-bold text-[#3758F9] text-lg">{teamData?.planName || 'Free'}</p>
+            <p className="text-xs text-[#637381] mt-1">
+              {teamData?.subscriptionStatus === 'active'
+                ? 'Active subscription'
+                : teamData?.subscriptionStatus === 'trialing'
+                ? 'Trial period'
+                : 'Free tier'}
+            </p>
+          </div>
+          <div className="space-y-2 mb-5">
+            {['WhatsApp Automation', 'Team Inbox', 'Basic Analytics'].map((f) => (
+              <div key={f} className="flex items-center gap-2 text-sm text-[#637381]">
+                <CheckCircle2 className="h-4 w-4 text-[#13C296] flex-shrink-0" />
+                {f}
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/pricing"
+            className="block w-full text-center rounded-md bg-[#3758F9] py-2.5 text-sm font-medium text-white hover:bg-[#1B44C8] transition-colors"
+          >
+            Upgrade Plan
+          </Link>
+        </div>
+      </div>
+
+      {/* Recent conversations */}
+      <div className="bg-white rounded-xl border border-[#DFE4EA] p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-semibold text-[#111928]">Recent Conversations</h2>
+          <span className="text-sm text-[#3758F9] hover:underline cursor-pointer">View all</span>
+        </div>
+        <div className="divide-y divide-[#F3F4F6]">
+          {recentConversations.map((conv) => {
+            const s = statusConfig[conv.status as keyof typeof statusConfig];
+            return (
+              <div key={conv.name} className="flex items-center gap-4 py-3 hover:bg-[#F9FAFB] -mx-2 px-2 rounded-lg cursor-pointer transition-colors">
+                {/* Avatar */}
+                <div className="w-10 h-10 rounded-full bg-[#3758F9]/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-semibold text-[#3758F9]">
+                    {conv.name[0]}
+                  </span>
+                </div>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-[#111928]">{conv.name}</span>
+                    <span className="text-xs text-[#637381] ml-2 flex-shrink-0">{conv.time}</span>
+                  </div>
+                  <p className="text-sm text-[#637381] truncate mt-0.5">{conv.preview}</p>
+                </div>
+                {/* Status + unread */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${s.color}`}>
+                    {s.label}
+                  </span>
+                  {conv.unread > 0 && (
+                    <span className="w-5 h-5 rounded-full bg-[#3758F9] text-white text-xs flex items-center justify-center font-bold">
+                      {conv.unread}
+                    </span>
+                  )}
                 </div>
               </div>
-              {index > 1 ? (
-                <form action={removeAction}>
-                  <input type="hidden" name="memberId" value={member.id} />
-                  <Button
-                    type="submit"
-                    variant="outline"
-                    size="sm"
-                    disabled={isRemovePending}
-                  >
-                    {isRemovePending ? 'Removing...' : 'Remove'}
-                  </Button>
-                </form>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-        {removeState?.error && (
-          <p className="text-red-500 mt-4">{removeState.error}</p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-function InviteTeamMemberSkeleton() {
-  return (
-    <Card className="h-[260px]">
-      <CardHeader>
-        <CardTitle>Invite Team Member</CardTitle>
-      </CardHeader>
-    </Card>
-  );
-}
-
-function InviteTeamMember() {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
-  const isOwner = user?.role === 'owner';
-  const [inviteState, inviteAction, isInvitePending] = useActionState<
-    ActionState,
-    FormData
-  >(inviteTeamMember, {});
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Invite Team Member</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form action={inviteAction} className="space-y-4">
-          <div>
-            <Label htmlFor="email" className="mb-2">
-              Email
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter email"
-              required
-              disabled={!isOwner}
-            />
-          </div>
-          <div>
-            <Label>Role</Label>
-            <RadioGroup
-              defaultValue="member"
-              name="role"
-              className="flex space-x-4"
-              disabled={!isOwner}
-            >
-              <div className="flex items-center space-x-2 mt-2">
-                <RadioGroupItem value="member" id="member" />
-                <Label htmlFor="member">Member</Label>
-              </div>
-              <div className="flex items-center space-x-2 mt-2">
-                <RadioGroupItem value="owner" id="owner" />
-                <Label htmlFor="owner">Owner</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          {inviteState?.error && (
-            <p className="text-red-500">{inviteState.error}</p>
-          )}
-          {inviteState?.success && (
-            <p className="text-green-500">{inviteState.success}</p>
-          )}
-          <Button
-            type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white"
-            disabled={isInvitePending || !isOwner}
-          >
-            {isInvitePending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Inviting...
-              </>
-            ) : (
-              <>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Invite Member
-              </>
-            )}
-          </Button>
-        </form>
-      </CardContent>
-      {!isOwner && (
-        <CardFooter>
-          <p className="text-sm text-muted-foreground">
-            You must be a team owner to invite new members.
-          </p>
-        </CardFooter>
-      )}
-    </Card>
-  );
-}
-
-export default function SettingsPage() {
-  return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium mb-6">Team Settings</h1>
-      <Suspense fallback={<SubscriptionSkeleton />}>
-        <ManageSubscription />
-      </Suspense>
-      <Suspense fallback={<TeamMembersSkeleton />}>
-        <TeamMembers />
-      </Suspense>
-      <Suspense fallback={<InviteTeamMemberSkeleton />}>
-        <InviteTeamMember />
-      </Suspense>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 }

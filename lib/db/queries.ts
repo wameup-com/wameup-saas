@@ -1,9 +1,10 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
+import { cache } from 'react';
 import { db } from './drizzle';
 import { activityLogs, teamMembers, teams, users } from './schema';
 import { createClient } from '@/lib/supabase/server';
 
-export async function getUser() {
+export const getUser = cache(async () => {
   const supabase = await createClient();
   const { data: { user: supabaseUser } } = await supabase.auth.getUser();
 
@@ -16,7 +17,7 @@ export async function getUser() {
     .limit(1);
 
   return user[0] ?? null;
-}
+});
 
 export async function getTeamByStripeCustomerId(customerId: string) {
   const result = await db

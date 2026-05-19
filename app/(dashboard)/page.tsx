@@ -1,130 +1,363 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight, CreditCard, Database } from 'lucide-react';
-import { Terminal } from './terminal';
+import Link from 'next/link';
+
+const features = [
+  {
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12C2 13.85 2.5 15.58 3.37 17.07L2 22L7.07 20.65C8.53 21.49 10.21 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17.5 15.5C17.25 16.25 16 16.88 15.38 16.93C14.75 16.98 14.15 17.19 11.38 16.07C8.08 14.76 6.04 11.41 5.88 11.2C5.72 10.99 4.62 9.52 4.62 8C4.62 6.48 5.41 5.74 5.7 5.42C5.99 5.1 6.35 5.01 6.57 5.01C6.79 5.01 7.01 5.01 7.21 5.02C7.42 5.02 7.7 4.95 7.98 5.62C8.26 6.29 8.98 7.83 9.07 8C9.16 8.17 9.22 8.37 9.11 8.6C9 8.83 8.94 8.97 8.77 9.17C8.6 9.37 8.42 9.61 8.27 9.76C8.1 9.93 7.93 10.11 8.12 10.42C8.31 10.73 8.98 11.82 9.95 12.7C11.21 13.83 12.26 14.18 12.57 14.35C12.88 14.52 13.07 14.5 13.26 14.28C13.45 14.06 14.1 13.3 14.31 12.99C14.52 12.68 14.74 12.73 15.03 12.84C15.32 12.95 16.84 13.7 17.15 13.87C17.46 14.04 17.67 14.12 17.74 14.27C17.8 14.41 17.8 15.12 17.5 15.5Z" fill="white"/>
+      </svg>
+    ),
+    title: 'Smart Automation',
+    description: 'Build WhatsApp chatbot flows that handle customer queries around the clock — no coding required.',
+  },
+  {
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16ZM7 9H9V11H7V9ZM11 9H13V11H11V9ZM15 9H17V11H15V9Z" fill="white"/>
+      </svg>
+    ),
+    title: 'Team Inbox',
+    description: 'Manage every WhatsApp conversation from a shared inbox. Assign chats, add notes, and collaborate in real time.',
+  },
+  {
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 3L3 10.53V11.5L9.84 14.16L12.5 21H13.46L21 3ZM5.88 10.79L17.36 5.28L10.34 13.18L5.88 10.79ZM13.22 18.12L10.83 13.66L18.73 6.64L13.22 18.12Z" fill="white"/>
+      </svg>
+    ),
+    title: 'Broadcast Campaigns',
+    description: 'Send personalised bulk messages to segmented contact lists. Reach thousands instantly with one click.',
+  },
+  {
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" fill="white"/>
+      </svg>
+    ),
+    title: 'Analytics & Reports',
+    description: 'Track delivery rates, read receipts, and agent performance. Make data-driven decisions every day.',
+  },
+];
+
+const testimonials = [
+  {
+    stars: 5,
+    quote: '"Wameup reduced our response time by 80%. Our customers love the instant replies and our team is no longer overwhelmed."',
+    name: 'Sarah K.',
+    role: 'E-commerce Director, ShopFast',
+    initials: 'SK',
+  },
+  {
+    stars: 5,
+    quote: '"We handle 3× more conversations with the same team. The automation flows are incredibly flexible — set up in minutes."',
+    name: 'Ahmed R.',
+    role: 'Customer Success Lead, NovaTech',
+    initials: 'AR',
+  },
+  {
+    stars: 5,
+    quote: '"The broadcast feature helped us run a weekend campaign that drove $50K in sales. The ROI was immediate."',
+    name: 'Maria L.',
+    role: 'Marketing Manager, BoldBrands',
+    initials: 'ML',
+  },
+];
+
+const steps = [
+  {
+    number: '01',
+    title: 'Connect Your WhatsApp',
+    description: 'Link your WhatsApp Business number in minutes. No technical setup — just scan a QR code and you\'re live.',
+  },
+  {
+    number: '02',
+    title: 'Build Automation Flows',
+    description: 'Create chatbot flows visually with our drag-and-drop builder. Set triggers, conditions, and responses with ease.',
+  },
+  {
+    number: '03',
+    title: 'Watch Conversations Convert',
+    description: 'Handle more customers automatically, hand off to agents when needed, and track every result in real time.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Does Wameup work with regular WhatsApp?',
+    a: 'Wameup works with the WhatsApp Business API. We support both small businesses with the Business App and larger companies using the official API through Meta.',
+  },
+  {
+    q: 'Can multiple agents handle conversations?',
+    a: 'Yes. You can add unlimited team members to your shared inbox. Assign conversations, leave internal notes, and collaborate without your customers noticing.',
+  },
+  {
+    q: 'Is there a free trial?',
+    a: 'All paid plans include a 14-day free trial — no credit card required. You can also start on our Free plan with no time limit.',
+  },
+  {
+    q: 'What happens when the bot can\'t answer?',
+    a: 'When a chatbot flow reaches its limit or detects a complex query, it seamlessly transfers the conversation to a human agent with full context preserved.',
+  },
+  {
+    q: 'Can I send bulk messages to my contacts?',
+    a: 'Yes. Our Broadcast feature lets you send personalised messages to contact segments. All broadcasts are sent through the official WhatsApp Business API, keeping you fully compliant.',
+  },
+];
+
+const stats = [
+  { value: '10,000+', label: 'Businesses' },
+  { value: '50M+', label: 'Messages Automated' },
+  { value: '73%', label: 'Avg Automation Rate' },
+  { value: '4.9 / 5', label: 'Customer Rating' },
+];
 
 export default function HomePage() {
   return (
-    <main>
-      <section className="py-20">
+    <>
+      {/* ====== Hero ====== */}
+      <section id="home" className="relative overflow-hidden bg-[#3758F9] pt-[140px] pb-0 md:pt-[160px] lg:pt-[180px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-            <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-              <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
-                Build Your SaaS
-                <span className="block text-orange-500">Faster Than Ever</span>
-              </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Launch your SaaS product in record time with our powerful,
-                ready-to-use template. Packed with modern technologies and
-                essential integrations.
-              </p>
-              <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
-                <a
-                  href="https://vercel.com/templates/next.js/next-js-saas-starter"
-                  target="_blank"
-                >
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="text-lg rounded-full"
-                  >
-                    Deploy your own
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </a>
-              </div>
-            </div>
-            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-              <Terminal />
+          <div className="mx-auto max-w-[820px] text-center">
+            <h1 className="mb-6 text-4xl font-bold leading-snug text-white sm:text-5xl lg:text-[56px] lg:leading-[1.15]">
+              WhatsApp Automation That Converts
+            </h1>
+            <p className="mx-auto mb-10 max-w-[600px] text-base font-medium text-white/80 sm:text-lg sm:leading-relaxed">
+              Automate conversations, manage your team inbox, and grow your business — without adding headcount.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center justify-center rounded-md bg-white py-[14px] px-8 text-base font-semibold text-[#3758F9] shadow-sm transition duration-300 hover:bg-gray-100"
+              >
+                Start Free Trial
+              </Link>
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center rounded-md bg-white/10 py-[14px] px-8 text-base font-semibold text-white transition duration-300 hover:bg-white hover:text-[#3758F9]"
+              >
+                View Pricing
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="py-16 bg-white w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-            <div>
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
-                <svg viewBox="0 0 24 24" className="h-6 w-6">
-                  <path
-                    fill="currentColor"
-                    d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"
-                  />
-                </svg>
+          {/* Hero visual — stats bar */}
+          <div className="mx-auto max-w-[900px] rounded-t-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-6">
+            <div className="grid grid-cols-3 gap-8 text-center">
+              <div>
+                <p className="text-3xl font-bold text-white">80%</p>
+                <p className="text-sm text-white/70 mt-1">Faster Response Time</p>
               </div>
-              <div className="mt-5">
-                <h2 className="text-lg font-medium text-gray-900">
-                  Next.js and React
-                </h2>
-                <p className="mt-2 text-base text-gray-500">
-                  Leverage the power of modern web technologies for optimal
-                  performance and developer experience.
-                </p>
+              <div className="border-x border-white/20">
+                <p className="text-3xl font-bold text-white">3×</p>
+                <p className="text-sm text-white/70 mt-1">More Conversations Handled</p>
               </div>
-            </div>
-
-            <div className="mt-10 lg:mt-0">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
-                <Database className="h-6 w-6" />
-              </div>
-              <div className="mt-5">
-                <h2 className="text-lg font-medium text-gray-900">
-                  Postgres and Drizzle ORM
-                </h2>
-                <p className="mt-2 text-base text-gray-500">
-                  Robust database solution with an intuitive ORM for efficient
-                  data management and scalability.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-10 lg:mt-0">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-orange-500 text-white">
-                <CreditCard className="h-6 w-6" />
-              </div>
-              <div className="mt-5">
-                <h2 className="text-lg font-medium text-gray-900">
-                  Stripe Integration
-                </h2>
-                <p className="mt-2 text-base text-gray-500">
-                  Seamless payment processing and subscription management with
-                  industry-leading Stripe integration.
-                </p>
+              <div>
+                <p className="text-3xl font-bold text-white">24/7</p>
+                <p className="text-sm text-white/70 mt-1">Automated Support</p>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Decorative dots */}
+        <div className="absolute -left-9 bottom-0 z-[-1] opacity-40 pointer-events-none">
+          <svg width="134" height="106" viewBox="0 0 134 106" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {Array.from({ length: 10 }, (_, col) =>
+              Array.from({ length: 7 }, (_, row) => (
+                <circle key={`${col}-${row}`} cx={1.667 + col * 14.667} cy={104 - row * 14.667} r="1.667" fill="white" />
+              ))
+            )}
+          </svg>
+        </div>
+        <div className="absolute -right-6 -top-6 z-[-1] opacity-40 pointer-events-none">
+          <svg width="134" height="106" viewBox="0 0 134 106" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {Array.from({ length: 10 }, (_, col) =>
+              Array.from({ length: 7 }, (_, row) => (
+                <circle key={`${col}-${row}`} cx={1.667 + col * 14.667} cy={104 - row * 14.667} r="1.667" fill="white" />
+              ))
+            )}
+          </svg>
+        </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      {/* ====== Social Proof Stats Bar ====== */}
+      <section className="bg-white border-b border-[#DFE4EA] py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Ready to launch your SaaS?
-              </h2>
-              <p className="mt-3 max-w-3xl text-lg text-gray-500">
-                Our template provides everything you need to get your SaaS up
-                and running quickly. Don't waste time on boilerplate - focus on
-                what makes your product unique.
-              </p>
-            </div>
-            <div className="mt-8 lg:mt-0 flex justify-center lg:justify-end">
-              <a href="https://github.com/nextjs/saas-starter" target="_blank">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg rounded-full"
-                >
-                  View the code
-                  <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-              </a>
-            </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {stats.map((s) => (
+              <div key={s.label}>
+                <p className="text-3xl font-bold text-[#111928]">{s.value}</p>
+                <p className="text-sm text-[#637381] mt-1">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
-    </main>
+
+      {/* ====== Features ====== */}
+      <section id="features" className="pt-20 pb-12 lg:pt-[120px] lg:pb-[70px] bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 mx-auto max-w-[500px] text-center lg:mb-[70px]">
+            <span className="mb-2 block text-lg font-semibold text-[#3758F9]">Features</span>
+            <h2 className="mb-3 text-3xl font-bold text-[#111928] sm:text-4xl md:text-[40px] md:leading-[1.2]">
+              Everything You Need to Grow on WhatsApp
+            </h2>
+            <p className="text-base text-[#637381]">
+              One platform to automate support, sales, and marketing — across all your WhatsApp numbers.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature) => (
+              <div key={feature.title} className="group">
+                <div className="relative z-10 mb-10 flex h-[70px] w-[70px] items-center justify-center rounded-[14px] bg-[#3758F9]">
+                  <span className="absolute top-0 left-0 -z-[1] flex h-[70px] w-[70px] rotate-[25deg] items-center justify-center rounded-[14px] bg-[#3758F9]/20 transition-transform duration-300 group-hover:rotate-45" />
+                  {feature.icon}
+                </div>
+                <h4 className="mb-3 text-xl font-bold text-[#111928]">{feature.title}</h4>
+                <p className="text-[#637381]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ====== How It Works ====== */}
+      <section className="py-20 lg:py-[120px] bg-[#F4F7FF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 mx-auto max-w-[500px] text-center lg:mb-[70px]">
+            <span className="mb-2 block text-lg font-semibold text-[#3758F9]">How It Works</span>
+            <h2 className="mb-3 text-3xl font-bold text-[#111928] sm:text-4xl md:text-[40px] md:leading-[1.2]">
+              Up and Running in 3 Steps
+            </h2>
+            <p className="text-base text-[#637381]">
+              No developers. No lengthy onboarding. Just connect, build, and grow.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 relative">
+            {/* Connector line (desktop only) */}
+            <div className="hidden md:block absolute top-10 left-1/3 right-1/3 h-px bg-[#DFE4EA] z-0" />
+
+            {steps.map((step, i) => (
+              <div key={step.number} className="relative text-center">
+                <div className="relative z-10 w-20 h-20 rounded-full bg-[#3758F9] flex items-center justify-center mx-auto mb-6 shadow-[0px_8px_20px_rgba(55,88,249,0.3)]">
+                  <span className="text-2xl font-bold text-white">{step.number}</span>
+                </div>
+                <h3 className="text-xl font-bold text-[#111928] mb-3">{step.title}</h3>
+                <p className="text-[#637381] text-base leading-relaxed">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ====== Testimonials ====== */}
+      <section className="py-20 md:py-[100px] bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-16 max-w-[500px] text-center">
+            <span className="mb-2 block text-lg font-semibold text-[#3758F9]">Testimonials</span>
+            <h2 className="mb-3 text-3xl font-bold text-[#111928] sm:text-4xl md:text-[40px] md:leading-[1.2]">
+              What Our Customers Say
+            </h2>
+            <p className="text-base text-[#637381]">
+              Businesses of all sizes use Wameup to automate WhatsApp and scale their customer experience.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {testimonials.map((t) => (
+              <div key={t.name} className="rounded-xl bg-white py-8 px-8 shadow-[0px_10px_20px_0px_rgba(92,115,160,0.07)] border border-[#DFE4EA]">
+                <div className="flex items-center gap-0.5 mb-5">
+                  {Array.from({ length: t.stars }).map((_, i) => (
+                    <svg key={i} width="18" height="16" viewBox="0 0 18 16" fill="#FBB040" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8.94043 0.360474L10.9477 6.06481H17.4433L12.1882 9.59028L14.1955 15.2946L8.94043 11.7691L3.68538 15.2946L5.69263 9.59028L0.437576 6.06481H6.93318L8.94043 0.360474Z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-[#637381] text-base mb-6 leading-relaxed">{t.quote}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-[46px] h-[46px] rounded-full bg-[#3758F9]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#3758F9] text-sm font-bold">{t.initials}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm text-[#111928]">{t.name}</h3>
+                    <p className="text-xs text-[#8899A8]">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ====== FAQ ====== */}
+      <section className="py-20 lg:py-[120px] bg-[#F9FAFB]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <span className="mb-2 block text-lg font-semibold text-[#3758F9]">FAQ</span>
+            <h2 className="mb-3 text-3xl font-bold text-[#111928] sm:text-4xl md:text-[40px] md:leading-[1.2]">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-base text-[#637381]">
+              Everything you need to know about Wameup. Can't find the answer? Email us.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, i) => (
+              <details key={i} className="group bg-white rounded-xl border border-[#DFE4EA] overflow-hidden">
+                <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none select-none">
+                  <span className="text-base font-semibold text-[#111928] pr-4">{faq.q}</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#3758F9]/10 flex items-center justify-center text-[#3758F9] transition-transform group-open:rotate-45">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 1V11M1 6H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </span>
+                </summary>
+                <div className="px-6 pb-5">
+                  <p className="text-[#637381] text-base leading-relaxed">{faq.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ====== CTA ====== */}
+      <section className="relative z-10 overflow-hidden bg-[#3758F9] py-20 lg:py-[100px]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="mx-auto max-w-[570px] text-center">
+            <h2 className="mb-4 text-3xl font-bold text-white md:text-[38px] md:leading-[1.3]">
+              Ready to Automate Your WhatsApp?
+            </h2>
+            <p className="mb-8 mx-auto max-w-[500px] text-base text-white/80 leading-relaxed">
+              Join thousands of businesses using Wameup to handle more conversations, close more deals, and delight more customers.
+            </p>
+            <Link
+              href="/sign-up"
+              className="inline-block py-3.5 px-8 text-base font-semibold text-white transition duration-300 rounded-md bg-[#13C296] hover:bg-[#0BB489]"
+            >
+              Start Free Trial — No Credit Card Required
+            </Link>
+          </div>
+        </div>
+
+        <span className="absolute top-0 left-0 pointer-events-none">
+          <svg width="495" height="470" viewBox="0 0 495 470" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="55" cy="442" r="138" stroke="white" strokeOpacity="0.04" strokeWidth="50" />
+            <circle cx="446" cy="0" r="39" stroke="white" strokeOpacity="0.04" strokeWidth="20" />
+            <path d="M245.406 137.609L233.985 94.9852L276.609 106.406L245.406 137.609Z" stroke="white" strokeOpacity="0.08" strokeWidth="12" />
+          </svg>
+        </span>
+        <span className="absolute bottom-0 right-0 pointer-events-none">
+          <svg width="493" height="470" viewBox="0 0 493 470" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="462" cy="5" r="138" stroke="white" strokeOpacity="0.04" strokeWidth="50" />
+            <circle cx="49" cy="470" r="39" stroke="white" strokeOpacity="0.04" strokeWidth="20" />
+            <path d="M222.393 226.701L272.808 213.192L259.299 263.607L222.393 226.701Z" stroke="white" strokeOpacity="0.06" strokeWidth="13" />
+          </svg>
+        </span>
+      </section>
+    </>
   );
 }

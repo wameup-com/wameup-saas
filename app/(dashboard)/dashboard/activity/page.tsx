@@ -9,8 +9,8 @@ export default function ExamplePage() {
       </h1>
       <Card>
         <CardContent className="flex flex-col items-center justify-center text-center py-20">
-          <div className="bg-orange-100 rounded-full p-4 mb-6">
-            <Layers className="h-10 w-10 text-orange-500" />
+          <div className="bg-[#3758F9]/10 rounded-full p-4 mb-6">
+            <Layers className="h-10 w-10 text-[#3758F9]" />
           </div>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">
             Your logic goes here
